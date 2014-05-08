@@ -14,7 +14,6 @@ pattern SCENARIOKW = '(Given|When|Then|And|But|\*)'
 state IN_SSL_DEFAULT:
 '#'           : paint(upto, SSL_DEFAULT), => IN_SSL_COMMENT
 '@'           : paint(upto, SSL_DEFAULT), => IN_SSL_TAG
-'\''          : paint(upto, SSL_DEFAULT), => IN_SSL_SQSTRING
 '"'           : paint(upto, SSL_DEFAULT), => IN_SSL_DQSTRING
 /^\s*"""\s*$/ : paint(upto, SSL_DEFAULT), => IN_SSL_DOCSTRING
 /[0-9]/       : paint(upto, SSL_DEFAULT), => IN_SSL_NUMBER
@@ -33,10 +32,6 @@ state IN_SSL_TAG:
 /\s+/ : paint(upto, SSL_IDENTIFIER), => IN_SSL_DEFAULT
 
 ## Strings
-state IN_SSL_SQSTRING:
-'\'' : paint(include, SSL_STRING), => IN_SSL_DEFAULT
-'<'  : paint(upto, SSL_STRING), spush_check(IN_SSL_SQSTRING), => IN_SSL_PLACEHOLDER
-
 state IN_SSL_DQSTRING:
 '"' : paint(include, SSL_STRING), => IN_SSL_DEFAULT
 '<' : paint(upto, SSL_STRING), spush_check(IN_SSL_DQSTRING), => IN_SSL_PLACEHOLDER
